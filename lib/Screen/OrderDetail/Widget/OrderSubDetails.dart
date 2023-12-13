@@ -327,7 +327,6 @@ class GetOrderDetails extends StatelessWidget {
     OrderModel model,
     Function update,
   ) {
-    print('_____surendra______${model.invoice}______${model.id}____');
     print('____ssssss_______${model.id}_________');
     return FutureBuilder<List<Directory>?>(
       future: _externalStorageDirectories,
@@ -663,7 +662,8 @@ showBottomSheet(context: context, builder: (context) => OrderTrackDataBottomShee
             ),
             InkWell(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => UserMapScreen(dId: model.deliveryBoyId),));
+                print('___model.deliveryBoyId.toString()_______${model.itemList?[0].dId}_________');
+                Navigator.push(context, MaterialPageRoute(builder: (context) => UserMapScreen(driverId: model.itemList?[0].dId),));
               },
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 5,vertical: 5),

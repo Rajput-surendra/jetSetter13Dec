@@ -144,6 +144,7 @@ class OrderItem {
       qty,
       price,
       subTotal,
+      dId,
       status,
       image,
       varientId,
@@ -176,6 +177,7 @@ class OrderItem {
 
   OrderItem({
     this.qty,
+    this.dId,
     this.id,
     this.name,
     this.price,
@@ -253,6 +255,7 @@ class OrderItem {
       productType: json['type'],
       downloadAllowed: json['download_allowed'],
       downloadLink: json['download_link'],
+      dId:json['delivery_boy_id']
     );
   }
 }

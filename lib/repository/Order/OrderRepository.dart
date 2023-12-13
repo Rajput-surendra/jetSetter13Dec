@@ -11,7 +11,7 @@ class OrderRepository {
   }) async {
     try {
       var orderList = await ApiBaseHelper().postAPICall(getOrderApi, parameter);
-
+   print('____parameter______${parameter}_________');
       return {
         'error': orderList['error'] as bool,
         'totalOrder': orderList['total'].toString(),
