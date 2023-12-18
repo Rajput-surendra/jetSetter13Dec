@@ -85,7 +85,7 @@ class _GetSellerProfileState extends State<GetSellerProfile> {
                           padding: const EdgeInsets.all(8.0),
                           child: StarRating(
                             noOfRatings: '0',
-                            totalRating: widget.sellerRating!,
+                            totalRating: widget.sellerRating.toString(),
                             needToShowNoOfRatings: false,
                           ),
                         ),
@@ -142,7 +142,7 @@ class _GetSellerProfileState extends State<GetSellerProfile> {
                 top: 10.0,
               ),
               child: Text(
-                widget.storeDesc!,
+                widget.storeDesc.toString(),
                 style: const TextStyle(
                   fontFamily: 'ubuntu',overflow: TextOverflow.ellipsis,
                 ),

@@ -35,7 +35,8 @@ class SellerProfile extends StatefulWidget {
       sellerRating,
       totalProductsOfSeller,
       storeDesc,
-      sellerStoreName;
+      sellerStoreName,sliderId;
+     bool ? isSlider;
 
   SellerProfile({
     Key? key,
@@ -43,10 +44,13 @@ class SellerProfile extends StatefulWidget {
     this.sellerName,
     this.sellerImage,
     this.sellerRating,
-    required this.totalProductsOfSeller,
+     this.totalProductsOfSeller,
     this.storeDesc,
     this.sellerStoreName,
     this.s_id,
+    this.sliderId,
+    this.isSlider
+
   }) : super(key: key);
 
   @override
@@ -123,7 +127,7 @@ class _SellerProfileState extends State<SellerProfile>
 
 
 
-    print('----------seller--id___neww-----${widget.s_id}');
+    print('----------seller--id___neww-----${widget.sliderId}');
     context.read<SellerDetailProvider>().setOffsetvalue(0);
     notificationoffset = 0;
     context.read<ExploreProvider>().productList.clear();
@@ -391,13 +395,13 @@ class _SellerProfileState extends State<SellerProfile>
                       //     ),
                       //   ),
                       // ),
-                      GetSellerProfile(
-                        sellerImage: widget.sellerImage!,
-                        sellerStoreName: widget.sellerStoreName!,
-                        sellerRating: widget.sellerRating,
-                        storeDesc: widget.storeDesc,
-                        totalProductsOfSeller: widget.totalProductsOfSeller!,
-                      ),
+                      // GetSellerProfile(
+                      //   sellerImage: widget.sellerImage!,
+                      //   sellerStoreName: widget.sellerStoreName.toString(),
+                      //   sellerRating: widget.sellerRating,
+                      //   storeDesc: widget.storeDesc,
+                      //   totalProductsOfSeller: widget.totalProductsOfSeller.toString(),
+                      // ),
                       Expanded(
                         child: Stack(
                           children: <Widget>[
@@ -472,11 +476,11 @@ class _SellerProfileState extends State<SellerProfile>
           SORT: sortBy,
           ORDER: orderBy,
           TOP_RETAED: showTopRated,
-          SELLER_ID: widget.s_id ,
+          SELLER_ID: widget.isSlider == true ? widget.sliderId : widget.s_id ,
 
           /*?? widget.sellerID*/
         };
-         print('-----------sellerrrrrrrrrrrrrrrr--------------${parameter}');
+        print('____parameter______${parameter}_________');
         // if (widget.s_id != '') {
         //   parameter[ATTRIBUTE_VALUE_ID] =widget.s_id;
         // }

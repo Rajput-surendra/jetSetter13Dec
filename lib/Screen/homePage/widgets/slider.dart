@@ -12,6 +12,7 @@ import '../../../Model/Model.dart';
 import '../../../Model/Section_Model.dart';
 import '../../../widgets/desing.dart';
 import '../../Product Detail/productDetail.dart';
+import '../../SellerDetail/Seller_Details.dart';
 import '../../SubCategory/SubCategory.dart';
 
 class CustomSlider extends StatefulWidget {
@@ -176,8 +177,7 @@ class _CustomSliderState extends State<CustomSlider> {
               ),
             ),
           );
-        } else if (context
-                .read<HomePageProvider>()
+        } else if (context.read<HomePageProvider>()
                 .homeSliderList[curSlider]
                 .type ==
             'categories') {
@@ -195,17 +195,36 @@ class _CustomSliderState extends State<CustomSlider> {
                 ),
               ),
             );
-          } else {
-            Navigator.push(
-              context,
-              CupertinoPageRoute(
-                builder: (context) => SubCategory(
-                  title: item.name!,
-                  subList: item.subList,
-                ),
-              ),
-            );
           }
+
+          // else if (context.read<HomePageProvider>().homeSliderList[curSlider].type == 'default'){
+          //   Navigator.push(
+          //     context,
+          //     CupertinoPageRoute(
+          //       builder: (context) => SellerProfile(isSlider: true,sliderId:item.sliderId),
+          //     ),
+          //   );
+          // }
+
+
+        } else {
+          print('__________dffgdfdgfdgfdg_________');
+          // Navigator.push(
+          //   context,
+          //   CupertinoPageRoute(
+          //     builder: (context) => SubCategory(
+          //       title: item.name!,
+          //       subList: item.subList,
+          //     ),
+          //   ),
+          // );
+
+          Navigator.push(
+            context,
+            CupertinoPageRoute(
+              builder: (context) => SellerProfile(isSlider: true,sliderId:slider.sliderId,sellerImage:slider.image, ),
+            ),
+          );
         }
       },
     );

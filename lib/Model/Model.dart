@@ -17,6 +17,7 @@ class Model {
       msg,
       uid,
       prodId,
+     sliderId,
       varId;
   bool? isDel;
   var list;
@@ -28,6 +29,7 @@ class Model {
       this.typeId,
       this.image,
       this.name,
+      this.sliderId,
       this.banner,
       this.list,
       this.title,
@@ -55,6 +57,9 @@ class Model {
       } else if (parsedJson[TYPE] == 'products') {
         listContent = Product.fromJson(listContent);
       }
+      else if (parsedJson[TYPE] == 'default') {
+        listContent = Product.fromJson(listContent);
+      }
     }
 
     return Model(
@@ -62,6 +67,7 @@ class Model {
         image: parsedJson[IMAGE],
         type: parsedJson[TYPE],
         typeId: parsedJson[TYPE_ID],
+        sliderId: parsedJson['url'],
         list: listContent);
   }
 
@@ -78,6 +84,7 @@ class Model {
     date = DateFormat('dd-MM-yyyy').format(DateTime.parse(date));
     return Model(
       id: parsedJson[ID],
+      sliderId: parsedJson['url'],
       title: parsedJson[SUB],
       desc: parsedJson[DESC],
       typeId: parsedJson[TICKET_TYPE],
@@ -92,6 +99,7 @@ class Model {
     return Model(
       id: parsedJson[ID],
       title: parsedJson[TITLE],
+      sliderId: parsedJson['url'],
     );
   }
 
@@ -113,15 +121,17 @@ class Model {
       msg: parsedJson[MESSAGE],
       uid: parsedJson[USER_ID],
       name: parsedJson[NAME],
+      sliderId: parsedJson['url'],
       date: date,
       attach: attachList,
     );
   }
 
-  factory Model.setAllCat(String id, String name) {
+  factory Model.setAllCat(String id, String name,String sliderId) {
     return Model(
       id: id,
       name: name,
+      sliderId: sliderId
     );
   }
 
@@ -130,6 +140,7 @@ class Model {
       prodId: parsedJson[PRODUCT_ID],
       varId: parsedJson[VARIANT_ID],
       isDel: parsedJson[IS_DELIVERABLE],
+      sliderId: parsedJson['url'],
     );
   }
 }
@@ -143,6 +154,7 @@ class attachment {
     return attachment(
       media: parsedJson[MEDIA],
       type: parsedJson[ICON],
+
     );
   }
 }

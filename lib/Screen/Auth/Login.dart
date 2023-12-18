@@ -168,7 +168,7 @@ class _LoginPageState extends State<Login> with TickerProviderStateMixin {
               ) async {
             bool? error = value['error'];
             String? msg = value['message'];
-            String? receivedOTP = value['otp'];
+            int? receivedOTP = value['otp'];
             String? mobile = value['mobile'];
             await buttonController!.reverse();
             SettingProvider settingsProvider =
