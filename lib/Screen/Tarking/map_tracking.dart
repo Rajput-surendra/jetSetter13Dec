@@ -384,6 +384,7 @@ var userLong;
       'user_id':CUR_USERID.toString(),
       'driver_id':widget.driverId.toString()
     });
+    print('_____request.fields_____${request.fields}_________');
     request.headers.addAll(headers);
     http.StreamedResponse response = await request.send();
     if (response.statusCode == 200) {

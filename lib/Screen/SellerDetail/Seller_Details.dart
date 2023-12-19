@@ -35,8 +35,8 @@ class SellerProfile extends StatefulWidget {
       sellerRating,
       totalProductsOfSeller,
       storeDesc,
-      sellerStoreName,sliderId;
-     bool ? isSlider;
+      sellerStoreName,sliderId,sId,catId;
+     bool ? isSlider,isCatBy;
 
   SellerProfile({
     Key? key,
@@ -49,7 +49,10 @@ class SellerProfile extends StatefulWidget {
     this.sellerStoreName,
     this.s_id,
     this.sliderId,
-    this.isSlider
+    this.isSlider,
+    this.catId,
+    this.sId,
+    this.isCatBy,
 
   }) : super(key: key);
 
@@ -127,7 +130,7 @@ class _SellerProfileState extends State<SellerProfile>
 
 
 
-    print('----------seller--id___neww-----${widget.sliderId}');
+    print('----------seller--id_${widget.sId}__neww-----${widget.catId}');
     context.read<SellerDetailProvider>().setOffsetvalue(0);
     notificationoffset = 0;
     context.read<ExploreProvider>().productList.clear();
@@ -475,8 +478,10 @@ class _SellerProfileState extends State<SellerProfile>
           OFFSET: notificationoffset.toString(),
           SORT: sortBy,
           ORDER: orderBy,
+          widget.isCatBy == true ? CATID: widget.catId.toString() :"",
           TOP_RETAED: showTopRated,
-          SELLER_ID: widget.isSlider == true ? widget.sliderId : widget.s_id ,
+
+          SELLER_ID:widget.isCatBy == true ? widget.sId: widget.isSlider == true ? widget.sliderId : widget.s_id ,
 
           /*?? widget.sellerID*/
         };
@@ -607,12 +612,12 @@ class _SellerProfileState extends State<SellerProfile>
                               fromExplore: false,
                               update: setStateNow,
                             )
-                          : getGridviewLayoutOfProducts(),
-                      notificationisgettingdata
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
-                          : Container(),
+                          : notificationisgettingdata ? Center(child: CircularProgressIndicator()) : context.read<ExploreProvider>().productList.length == 0 ? Center(child: Text("No product found!!!")):  getGridviewLayoutOfProducts(),
+                      // notificationisgettingdata
+                      //     ? const Center(
+                      //         child: CircularProgressIndicator(),
+                      //       )
+                      //     : Container(),
                     ],
                   ),
           ),
@@ -1244,7 +1249,7 @@ class _SellerProfileState extends State<SellerProfile>
   getGridviewLayoutOfProducts() {
     return Padding(
       padding: const EdgeInsets.only(right: 10, left: 10),
-      child: GridView.count(
+      child:   GridView.count(
         controller: productsController,
         padding: const EdgeInsetsDirectional.only(top: 5),
         crossAxisCount: 2,
@@ -1256,7 +1261,7 @@ class _SellerProfileState extends State<SellerProfile>
         children: List.generate(
           context.read<ExploreProvider>().productList.length,
           (index) {
-            return GridViewLayOut(
+            return   GridViewLayOut(
               index: index,
               update: setStateNow,
             );

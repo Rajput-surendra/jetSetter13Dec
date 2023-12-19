@@ -65,7 +65,7 @@ class _DashboardPageState extends State<Dashboard>
   @override
   void initState() {
     _getAddressFromLatLng();
-    getUserCurrentLocation();
+   // getUserCurrentLocation();
     SystemChromeSettings.setSystemButtomNavigationBarithTopAndButtom();
     SystemChromeSettings.setSystemUIOverlayStyleWithNoSpecification();
 
@@ -330,10 +330,6 @@ class _DashboardPageState extends State<Dashboard>
                   _currentAddress = result.formattedAddress.toString();
                   homelat = result.geometry!.location.lat;
                   homeLong = result.geometry!.location.lng;
-
-
-
-
                 });
               getCityFromLatLng(result.geometry!.location.lat, result.geometry!.location.lng);
                 Navigator.of(context).pop();
@@ -397,30 +393,34 @@ class _DashboardPageState extends State<Dashboard>
         onTap: (){
           print('_____ddddddddddddd_____${_currentAddress}_________');
           //showPlacePicker();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PlacePicker(
-                apiKey: Platform.isAndroid
-                    ? "AIzaSyAXL1tpx0xZORmWdCkqaStqHC4BhklFZ78"
-                    : "AIzaSyAXL1tpx0xZORmWdCkqaStqHC4BhklFZ78",
-                onPlacePicked: (result) {
-                  print("111111111111111111111${result.formattedAddress}");
-                  setState(() {
-                    _currentAddress = result.formattedAddress.toString();
-                    homelat = result.geometry!.location.lat;
-                    homeLong = result.geometry!.location.lng;
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => PlacePicker(
+          //       apiKey: Platform.isAndroid
+          //           ? "AIzaSyDPsdTq-a4AHYHSNvQsdAlZgWvRu11T9pM
 
-                  });
-                  Navigator.of(context).pop(result.geometry!.location);
-                  print('_____dssdsdf_____${result.geometry!.location}_________');
-                  // distnce();
-                },
-                initialPosition: LatLng(currentLocation!.latitude, currentLocation!.longitude,),
-               // useCurrentLocation: true,
-              ),
-            ),
-          );
+
+          //           : "AIzaSyDPsdTq-a4AHYHSNvQsdAlZgWvRu11T9pM
+
+
+          //       onPlacePicked: (result) {
+          //         print("111111111111111111111${result.formattedAddress}");
+          //         setState(() {
+          //           _currentAddress = result.formattedAddress.toString();
+          //           homelat = result.geometry!.location.lat;
+          //           homeLong = result.geometry!.location.lng;
+          //
+          //         });
+          //         Navigator.of(context).pop(result.geometry!.location);
+          //         print('_____dssdsdf_____${result.geometry!.location}_________');
+          //         // distnce();
+          //       },
+          //       initialPosition: LatLng(currentLocation!.latitude, currentLocation!.longitude,),
+          //      // useCurrentLocation: true,
+          //     ),
+          //   ),
+          // );
         },
             child: Text(
                 title!,
@@ -461,7 +461,7 @@ class _DashboardPageState extends State<Dashboard>
                 )
                     : Routes.navigateToSearchScreen(context);
               },
-              child: Icon(
+              child: const Icon(
                 Icons.search,color:colors.blackTemp,
 
               ),

@@ -38,6 +38,13 @@
             {
               "client_id": "862406436066-p9du4gush12ta4f91j883f1gqgiqfgc6.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "862406436066-ijhbof74ug0omv67t73i55e651h41rc1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jetsetter.user"
+              }
             }
           ]
         }
@@ -75,6 +82,13 @@
             {
               "client_id": "862406436066-p9du4gush12ta4f91j883f1gqgiqfgc6.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "862406436066-ijhbof74ug0omv67t73i55e651h41rc1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jetsetter.user"
+              }
             }
           ]
         }
@@ -112,6 +126,13 @@
             {
               "client_id": "862406436066-p9du4gush12ta4f91j883f1gqgiqfgc6.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "862406436066-ijhbof74ug0omv67t73i55e651h41rc1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jetsetter.user"
+              }
             }
           ]
         }

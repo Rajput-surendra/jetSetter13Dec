@@ -13,7 +13,7 @@ import '../Language/languageSettings.dart';
 import 'Seller_Details.dart';
 
 class SellerList extends StatefulWidget {
-  String? catId;
+  String? catId,sellerId,catIdBySeller;
    SellerList({Key? key,this.catId}) : super(key: key);
 
   @override

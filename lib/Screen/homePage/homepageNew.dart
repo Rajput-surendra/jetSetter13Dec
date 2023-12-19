@@ -47,6 +47,7 @@ import '../../Model/Get_brands_model.dart';
 import '../../Provider/Favourite/FavoriteProvider.dart';
 import '../../Provider/homePageProvider.dart';
 import '../../widgets/desing.dart';
+import '../Cart/cat_Home.dart';
 import '../Language/languageSettings.dart';
 import '../../widgets/networkAvailablity.dart';
 import '../../widgets/security.dart';
@@ -121,7 +122,8 @@ class _HomePageState extends State<HomePage>
     getImagesFourthdSliderApi();
     //getBrandApi();
     _getAddressFromLatLng();
-    getUserCurrentLocation();
+   getUserCurrentLocation();
+   // _getCurrentLocationPERMISSION();
 
     context.read<HomePageProvider>().getSliderImages();
 
@@ -484,8 +486,63 @@ getCurrentLocationCard(){
   double long = 0.0;
   Position? currentLocation;
   String? _currentAddress;
+  bool isRequestingLocation = false;
 
-  Future getUserCurrentLocation() async {
+  Future<void> _getCurrentLocationPERMISSION() async {
+    if (isRequestingLocation) {
+      // A request is already in progress, so return
+      return;
+    }
+
+    try {
+      setState(() {
+        isRequestingLocation = true; // Set flag to indicate a permission request is in progress
+      });
+
+      var status = await Permission.location.status;
+
+      if (status.isGranted) {
+        // Permission already granted
+        _fetchLocation();
+      } else if (status.isDenied) {
+        // Permission hasn't been requested yet
+        await _requestLocationPermission();
+      } else {
+        // Permission denied
+        openAppSettings(); // Opens app settings to allow the user to enable the permission manually
+      }
+    } finally {
+      setState(() {
+        isRequestingLocation = false; // Reset the flag when the request is finished
+      });
+    }
+  }
+
+  Future<void> _requestLocationPermission() async {
+    var result = await Permission.location.request();
+
+    if (result == PermissionStatus.granted) {
+      _fetchLocation();
+    }
+    // You can handle other cases if needed
+  }
+
+  Future<void> _fetchLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      setState(() {
+        currentLocation = position;
+        homelat = currentLocation?.latitude;
+        homeLong = currentLocation?.longitude;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
+Future getUserCurrentLocation() async {
     var status = await Permission.location.request();
     if(status.isDenied) {
       setSnackbar1("Permision is requiresd");
@@ -723,6 +780,7 @@ getCurrentLocationCard(){
   }
   getSellerList(){
 
+
     return Container(
       // color: colors.whiteTemp,
      // height:MediaQuery.of(context).size.height/1.0,
@@ -735,9 +793,14 @@ getCurrentLocationCard(){
           itemBuilder: (c,i){
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: InkWell(onTap: (){
+              child: InkWell(onTap: () async {
                print('__s_id________${sellerList[i].seller_id}_________');
-                setState(() {
+               final SharedPreferences prefs = await SharedPreferences.getInstance();
+               await prefs.setString('sellerid', '${sellerList[i].seller_id}');
+               print('_____cddcdc_____${prefs.setString}_________');
+
+               setState(() {
+
                   s_id = sellerList[i].seller_id;
                 });
 
@@ -746,15 +809,16 @@ getCurrentLocationCard(){
                 sellerStoreName =sellerList[i].store_name;
                 sellerRating = sellerList[i].seller_rating;
                 storeDesc = sellerList[i].store_description;
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>CatHomeSrreen(sID:seller_id)));
                 //
-                Navigator.push(
-
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => SellerProfile(totalProductsOfSeller: '',s_id:s_id,sellerImage: sellerImage,sellerStoreName:sellerStoreName,sellerRating: sellerRating,storeDesc: storeDesc
-                    ),
-                  ),
-                );
+                // Navigator.push(
+                //
+                //   context,
+                //   CupertinoPageRoute(
+                //     builder: (context) => SellerProfile(totalProductsOfSeller: '',s_id:s_id,sellerImage: sellerImage,sellerStoreName:sellerStoreName,sellerRating: sellerRating,storeDesc: storeDesc
+                //     ),
+                //   ),
+                // );
 
               },
                 child: Container(
@@ -1175,8 +1239,8 @@ getCurrentLocationCard(){
       getImagesThirdSliderApi();
       getImagesFourthdSliderApi();
       getBrandApi();
-      // _getAddressFromLatLng();
-      // getUserCurrentLocation();
+    _getAddressFromLatLng();
+      //getUserCurrentLocation();
      // getSeller();
 
       context.read<HomePageProvider>().getSections();

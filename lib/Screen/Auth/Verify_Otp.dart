@@ -1880,7 +1880,7 @@ class _MobileOTPState extends State<VerifyOtp> with TickerProviderStateMixin {
               monoVarifyText(),
               otpText(),
               mobText(),
-              //otpTextVisible(),
+              otpTextVisible(),
               otpLayout(),
               resendText(),
               verifyBtn(),

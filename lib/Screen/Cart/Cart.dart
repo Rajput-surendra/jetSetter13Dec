@@ -134,6 +134,13 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     context.read<CartProvider>().setProgress(false);
     setState(() {});
   }
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      //do your stuff
+      sellerStatusApi();
+    }
+  }
 
   Future<void> saveForLaterFun({
     required int index,
@@ -175,6 +182,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    sellerStatusApi();
     context.read<CartProvider>().setprescriptionImages([]);
     context.read<CartProvider>().selectedMethod = null;
     context.read<CartProvider>().selectedMethod = null;
@@ -1290,7 +1298,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
     print("paymethod****checkout****${context.read<CartProvider>().payMethod}");
 
-    return showModalBottomSheet(
+    return 
+      showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -1722,8 +1731,15 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                           ),
                                         ),
                                         const Spacer(),
-                                        InkWell(
-                                          onTap: () {
+                                         InkWell(
+                                          onTap:
+                                          status == "0" ?(){
+                                            setSnackbar(
+                                                getTranslated(
+                                                    context, 'Seller is Offline')!,
+                                                _checkscaffoldKey);
+                                          }:
+                                              () async {
                                             context
                                                 .read<CartProvider>()
                                                 .checkoutState!(
@@ -1894,7 +1910,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                               );
                                             } else {
                                               if (isAvailable) {
-                                                getPhonpayURL();
+                                              await getPhonpayURL();
                                                 if (context
                                                         .read<CartProvider>()
                                                         .oriPrice !=
@@ -1923,7 +1939,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                             height: 40,
                                             width: 120,
                                             decoration: BoxDecoration(
-                                                color: colors.primary,
+                                                color:status == "0" ? colors.primary.withOpacity(0.4): colors.primary,
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             child: const Center(
@@ -2358,7 +2374,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
           },
         );
       },
-    );
+    ).whenComplete(() => sellerStatusApi());
   }
 
   Future<void> _getAddress() async {
@@ -2425,7 +2441,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
             if (ISFLAT_DEL) {
               if ((context.read<CartProvider>().oriPrice) <
-                  double.parse(MIN_AMT!)) {
+                  double.parse(MIN_AMT.toString())) {
                 context.read<CartProvider>().deliveryCharge =
                     double.parse(CUR_DEL_CHR!);
               } else {
@@ -2559,7 +2575,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     }
   }
 
-  void initiatePayment() {
+   initiatePayment() {
     // Replace this with the actual PhonePe payment URL you have
     String phonePePaymentUrl = url ?? '';
     callBackUrl = "https://jetsetterindia.com/app/home/phonepay_success";
@@ -3712,7 +3728,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                       fontFamily: 'ubuntu',
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     print('_________surendra_________');
                     Routes.pop(context);
                     if (context.read<CartProvider>().payMethod ==
@@ -3721,7 +3737,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                     } else if (context.read<CartProvider>().payMethod ==
                         getTranslated(context, 'STRIPE_LBL')) {
                       print('_________surendra_________');
-                    initiatePayment();
+                   await initiatePayment();
                      // placeOrder('');
                     } else {
                       placeOrder('');
@@ -3742,7 +3758,38 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
       },
     );
   }
+  String ? status,sellerId;
+  sellerStatusApi() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
+      sellerId = prefs.getString('sellerid');
+
+    var headers = {
+      'Cookie': 'ci_session=51a81c3884949d34a6289a71a25af063f953d05f'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl1/check_seller_online'));
+    request.fields.addAll({
+      'seller_id':sellerId.toString()
+    });
+    print('____request.fields______${request.fields}_________');
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+       var result  = await response.stream.bytesToString();
+       var finalResult  = jsonDecode(result);
+       status = finalResult['data'];
+       print('_____status_____${status}_________');
+       setState(() {
+
+       });
+    }
+    else {
+    print(response.reasonPhrase);
+    }
+
+  }
   void bankTransfer() {
     showGeneralDialog(
       barrierColor: Theme.of(context).colorScheme.black.withOpacity(0.5),
