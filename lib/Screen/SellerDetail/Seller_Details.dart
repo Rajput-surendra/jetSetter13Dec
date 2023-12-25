@@ -462,6 +462,7 @@ class _SellerProfileState extends State<SellerProfile>
   }
 
   Future getProduct(String? showTopRated) async {
+    print("${widget.isCatBy}"+"99999999999999999999999");
     isNetworkAvail = await isNetworkAvailable();
     if (isNetworkAvail) {
       if (notificationisloadmore) {
@@ -478,11 +479,10 @@ class _SellerProfileState extends State<SellerProfile>
           OFFSET: notificationoffset.toString(),
           SORT: sortBy,
           ORDER: orderBy,
-          widget.isCatBy == true ? CATID: widget.catId.toString() :"",
+          'category_id': widget.isCatBy == true?widget.catId.toString():"",
+           // widget.isCatBy == true ? CATID: widget.catId.toString() :"",
           TOP_RETAED: showTopRated,
-
           SELLER_ID:widget.isCatBy == true ? widget.sId: widget.isSlider == true ? widget.sliderId : widget.s_id ,
-
           /*?? widget.sellerID*/
         };
         print('____parameter______${parameter}_________');

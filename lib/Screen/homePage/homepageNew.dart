@@ -283,7 +283,8 @@ class _HomePageState extends State<HomePage>
                               SizedBox(height: 5,),
                               filter(),
                               const SizedBox(height: 10,),
-                              sellerList== null ? Center(child: CircularProgressIndicator()): sellerList.isEmpty ? Center(child: const Text('Restaurant Not Found!!',style: TextStyle(color: colors.blackTemp),)):getSellerList(),
+                              sellerList== null ? Center(child: CircularProgressIndicator()): sellerList.isEmpty ?
+                              Center(child: const Text('Restaurant Not Found!!',style: TextStyle(color: colors.blackTemp),)):getSellerList(),
                               const MostLikeSection(),
                               const SizedBox(height: 10,),
                               getImagesModel3?.data?.isEmpty ?? true ? const SizedBox() :  imageCard3(),
@@ -314,22 +315,21 @@ class _HomePageState extends State<HomePage>
             child: InkWell(
               onTap: (){
                 setState(() {
-                  _currentIndex = 1;
-                  getSeller('veg');
-
+                  _currentIndex = 3;
+                  getSeller('both');
                 });
               },
               child: Container(
                 decoration: BoxDecoration(
-                    color: _currentIndex == 1 ?
+                    color: _currentIndex == 3 ?
                     colors.primary
                         : colors.primary.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(10)
                 ),
+                // width: 120,
                 height: 30,
-                width: 70,
                 child: Center(
-                  child: Text("Pure Veg",style: TextStyle(color: _currentIndex == 1 ?colors.whiteTemp:colors.blackTemp,fontSize: 15)),
+                  child: Text("Veg & Non Veg",style: TextStyle(color: _currentIndex == 3 ?colors.whiteTemp:colors.blackTemp,fontSize: 15),),
                 ),
               ),
             ),
@@ -359,25 +359,27 @@ class _HomePageState extends State<HomePage>
             ),
           ),
           SizedBox(width: 5,),
+
           Expanded(
             child: InkWell(
               onTap: (){
                 setState(() {
-                  _currentIndex = 3;
-                  getSeller('both');
+                  _currentIndex = 1;
+                  getSeller('veg');
+
                 });
               },
               child: Container(
                 decoration: BoxDecoration(
-                    color: _currentIndex == 3 ?
+                    color: _currentIndex == 1 ?
                     colors.primary
                         : colors.primary.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(10)
                 ),
-                // width: 120,
                 height: 30,
+                width: 70,
                 child: Center(
-                  child: Text("Veg & Non Veg",style: TextStyle(color: _currentIndex == 3 ?colors.whiteTemp:colors.blackTemp,fontSize: 15),),
+                  child: Text("Pure Veg",style: TextStyle(color: _currentIndex == 1 ?colors.whiteTemp:colors.blackTemp,fontSize: 15)),
                 ),
               ),
             ),

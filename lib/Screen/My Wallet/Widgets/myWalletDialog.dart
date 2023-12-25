@@ -1182,7 +1182,7 @@ class _AddMoneyDialogState extends State<AddMoneyDialog> {
       MaterialPageRoute(
         builder: (context) => Scaffold(
           appBar: getSimpleAppBar(
-              getTranslated(context, 'PhonePe Payment')!, context),
+              getTranslated(context, 'PhonePe Payment11')!, context),
           body: InAppWebView(
             initialUrlRequest: URLRequest(url: Uri.parse(phonePePaymentUrl)),
             onWebViewCreated: (controller) {

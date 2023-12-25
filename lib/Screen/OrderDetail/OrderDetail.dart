@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:isolate';
 import 'dart:ui';
@@ -9,6 +10,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import '../../Helper/Color.dart';
+import '../../Helper/Constant.dart';
 import '../../Helper/String.dart';
 import '../../Provider/Order/UpdateOrderProvider.dart';
 import '../../widgets/appBar.dart';
@@ -19,6 +21,7 @@ import '../NoInterNetWidget/NoInterNet.dart';
 import 'Widget/OrderSubDetails.dart';
 import 'Widget/SingleProduct.dart';
 import 'Widget/SubHeadingTabBar.dart';
+import 'package:http/http.dart'as http;
 
 class OrderDetail extends StatefulWidget {
   final OrderModel? model;
@@ -34,10 +37,37 @@ class OrderDetail extends StatefulWidget {
 class StateOrder extends State<OrderDetail>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   Future<List<Directory>?>? _externalStorageDirectories;
+  String? dName,dMobile,dImages;
+  getDeliveryBoys() async {
+    var headers = {
+      'Cookie': 'ci_session=8cdca4217e6c7e539f59add9362b3b9af535e699'
+    };
+    var request = http.MultipartRequest('POST', Uri.parse('${baseUrl}get_driver_details'));
+    request.fields.addAll({
+      'driver_id': '79'
+    });
 
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var result = await response.stream.bytesToString();
+      var finalResult = jsonDecode(result);
+      dName = finalResult['data']['username'];
+      dMobile = finalResult['data']['mobile'];
+      dImages = finalResult['data']['driver_profile'];
+      print('____dName______${dName}_________');
+    }
+    else {
+      print(response.reasonPhrase);
+    }
+
+  }
   @override
   void initState() {
     super.initState();
+    getDeliveryBoys();
     context.read<UpdateOrdProvider>().externalStorageDirectories =
         getExternalStorageDirectories(type: StorageDirectory.downloads);
 
@@ -199,6 +229,9 @@ class StateOrder extends State<OrderDetail>
                               context.read<UpdateOrdProvider>().tabController,
                           children: [
                             GetOrderDetails(
+                              name: dName,
+                              mobile: dMobile,
+                              images: dImages,
                               model: model,
                               controller:
                                   context.read<UpdateOrdProvider>().controller,

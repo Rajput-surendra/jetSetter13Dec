@@ -136,7 +136,7 @@ class DesignConfiguration {
   }) {
     return FadeInImage.assetNetwork(
       image: imageurlString,
-      placeholder: DesignConfiguration.setPngPath('placeholder'),
+      placeholder: '',//DesignConfiguration.setPngPath('placeholder'),
       width: widthvalue,
       height: heightvalue,
       fit: boxFit,

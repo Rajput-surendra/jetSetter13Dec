@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:eshop_multivendor/Helper/Color.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html_to_pdf/flutter_html_to_pdf.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -17,9 +19,11 @@ import '../../../widgets/snackbar.dart';
 import '../../Tarking/map_tracking.dart';
 import 'OrderTrackDataSheet.dart';
 import 'SingleProduct.dart';
+import 'package:http/http.dart'as http;
 
 class GetOrderDetails extends StatelessWidget {
   OrderModel model;
+  String? name,mobile,images;
   ScrollController controller;
   Future<List<Directory>?>? externalStorageDirectories;
   Function updateNow;
@@ -27,6 +31,9 @@ class GetOrderDetails extends StatelessWidget {
     Key? key,
     this.externalStorageDirectories,
     required this.controller,
+    this.name,
+    this.mobile,
+    this.images,
     required this.updateNow,
     required this.model,
   }) : super(key: key);
@@ -321,7 +328,13 @@ class GetOrderDetails extends StatelessWidget {
   }
 
 
-
+// get(){
+//     return Column(
+//       children: [
+//
+//       ],
+//     );
+// }
   dwnInvoice(
     Future<List<Directory>?>? _externalStorageDirectories,
     OrderModel model,
@@ -425,7 +438,33 @@ class GetOrderDetails extends StatelessWidget {
   }
 
 
-Widget trackYourOrder (BuildContext context) {
+//   String? dName,dMobile,dImages;
+//   getDeliveryBoys() async {
+//   var headers = {
+//     'Cookie': 'ci_session=8cdca4217e6c7e539f59add9362b3b9af535e699'
+//   };
+//   var request = http.MultipartRequest('POST', Uri.parse('${baseUrl}get_driver_details'));
+//   request.fields.addAll({
+//     'driver_id': '79'
+//   });
+//
+//   request.headers.addAll(headers);
+//
+//   http.StreamedResponse response = await request.send();
+//
+//   if (response.statusCode == 200) {
+//      var result = await response.stream.bytesToString();
+//      var finalResult = jsonDecode(result);
+//      dName = finalResult['data']['username'];
+//      dMobile = finalResult['data']['mobile'];
+//      dImages = finalResult['data']['driver_profile'];
+//   }
+//   else {
+//   print(response.reasonPhrase);
+//   }
+//
+// }
+   Widget trackYourOrder (BuildContext context) {
     return Card(child: InkWell(
       onTap: (){
 showBottomSheet(context: context, builder: (context) => OrderTrackDataBottomSheet(awb: '1057847214' ),);
@@ -628,9 +667,10 @@ showBottomSheet(context: context, builder: (context) => OrderTrackDataBottomShee
       ),
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
+    print('_____222_____${name.toString()}_________');
     return SingleChildScrollView(
       controller: controller,
       child: Padding(
@@ -673,7 +713,7 @@ showBottomSheet(context: context, builder: (context) => OrderTrackDataBottomShee
                     color: colors.whiteTemp,
                     borderRadius: BorderRadius.circular(5)
                   ),
-                  child: ListTile(
+                  child:  ListTile(
                     leading:  Icon(Icons.location_on_outlined,color: colors.primary,),
                     title:  Text(
                       getTranslated(context, 'TRACK_ORDER')!,
@@ -683,12 +723,54 @@ showBottomSheet(context: context, builder: (context) => OrderTrackDataBottomShee
                           .copyWith(color: Theme.of(context).colorScheme.lightBlack),
                     ),
                     trailing: const Icon(
-                    Icons.keyboard_arrow_right,
-                    color: colors.primary,
+                      Icons.keyboard_arrow_right,
+                      color: colors.primary,
+                    ),
                   ),
-                  )
               ),
             ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 2),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+                color: colors.whiteTemp
+            ),
+            height: 115,
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 10,top: 2),
+                  child: Text("Delivery Boy Details"),
+                ),
+                SizedBox(height: 5,),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Container(
+                          height: 80,
+                          width: 80,
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: Image.network("${images}",fit: BoxFit.fill,))),
+                    ),
+                    SizedBox(width: 10,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("${name.toString()}"),
+                        Text("${mobile.toString()}"),
+                      ],
+                    )
+
+                  ],
+                ),
+              ],
+            )
+          ),
             dwnInvoice(
               externalStorageDirectories,
               model,

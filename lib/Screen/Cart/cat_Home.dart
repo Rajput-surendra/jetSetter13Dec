@@ -32,36 +32,65 @@ class _CatHomeSrreenState extends State<CatHomeSrreen> {
           getTranslated(context, 'Categories')!, context),
       body: sellerByCatModel == null ? Center(child: CircularProgressIndicator()): sellerByCatModel?.data?.isEmpty ?? false ? Center(child: Text("No category found!!")) :Container(
 
-          child: GridView.builder(
-            itemCount:sellerByCatModel?.data?.length ?? 0 ,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                childAspectRatio: 3/3.2
-              ),
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: InkWell(
+          child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: sellerByCatModel?.data?.length ?? 0 ,
+              itemBuilder: (context,index){
+                return
+
+
+                  InkWell(
                     onTap: (){
+
                       Navigator.push(context, MaterialPageRoute(builder: (context)=>SellerProfile(sId:widget.sID,catId:sellerByCatModel?.data?[index].id,isCatBy: true,)));
                     },
-                    child: Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5,vertical: 0),
+                      child: Card(
+                      child: ListTile(
+                        title:   Text("${sellerByCatModel?.data?[index].name}",
+
+                        ),
+                        trailing: Icon(Icons.arrow_forward_ios_outlined,color: Colors.black54,),
                       ),
-                      child: Column(
-                        children: [
-                          Container(
-                            height: 150,
-                              child: Image.network("${sellerByCatModel?.data?[index].image}")),
-                             Text("${sellerByCatModel?.data?[index].name}"),
-                          SizedBox(height: 2,)
-                        ],
-                      ),
+                ),
                     ),
-                  ),
-                );
-              })),
+                  );
+
+          })
+          // GridView.builder(
+          //   itemCount:sellerByCatModel?.data?.length ?? 0 ,
+          //     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          //         crossAxisCount: 2,
+          //       childAspectRatio: 3/3.2
+          //     ),
+          //     itemBuilder: (context, index) {
+          //       return Padding(
+          //         padding: const EdgeInsets.all(5.0),
+          //         child: InkWell(
+          //           onTap: (){
+          //             Navigator.push(context, MaterialPageRoute(builder: (context)=>SellerProfile(sId:widget.sID,catId:sellerByCatModel?.data?[index].id,isCatBy: true,)));
+          //           },
+          //           child: Card(
+          //             shape: RoundedRectangleBorder(
+          //               borderRadius: BorderRadius.circular(10)
+          //             ),
+          //             child:
+          //             Column(
+          //               children: [
+          //                 Container(
+          //                   height: 150,
+          //                     child: Image.network("${sellerByCatModel?.data?[index].image}")),
+          //                    Text("${sellerByCatModel?.data?[index].name}"),
+          //                 SizedBox(height: 2,)
+          //               ],
+          //             ),
+          //           ),
+          //         ),
+          //       );
+          //     })
+
+      ),
     );
   }
   SellerByModel? sellerByCatModel;

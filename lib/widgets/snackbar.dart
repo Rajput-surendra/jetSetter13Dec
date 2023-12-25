@@ -6,6 +6,9 @@ import '../Helper/Constant.dart';
 setSnackbar(String msg, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.9),
+
       content: Text(
         msg,
         textAlign: TextAlign.center,

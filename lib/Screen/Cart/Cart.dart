@@ -1285,6 +1285,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   double allTotalPrice = 0.0;
   double amt = 0;
   double finalTotalAmount = 0.0;
+  double finalTotal = 0.0;
   List<int> numbers = [10, 30, 50];
   var selectedNumber;
   // List<int> Donatenumbers = [5,];
@@ -1404,11 +1405,22 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                               (context, index) {
                                                             return InkWell(
                                                               onTap: () {
-                                                                setState(() {selectedNumber = numbers[index];finalTotalAmount = context.read<CartProvider>().totalPrice + int.parse(selectedNumber.toString());
-                                                                  isChecked =
-                                                                      false;
-                                                                });
+                                                                if(selectedNumber.toString() == numbers[index].toString()){
+                                                                  finalTotalAmount =  finalTotalAmount - int.parse(selectedNumber.toString());
+                                                                  selectedNumber = null;
 
+
+                                                                  setState((){
+
+                                                                  });
+                                                                }else{
+                                                                  setState(() {
+                                                                    selectedNumber = numbers[index];
+                                                                    finalTotalAmount = context.read<CartProvider>().totalPrice + int.parse(selectedNumber.toString());
+                                                                  isChecked =
+                                                                  false;
+                                                                  });
+                                                                }
                                                                 // print('____allTotalPrice______${allTotalPrice}_________');
                                                               },
                                                               child: Card(
@@ -1427,14 +1439,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                                     borderRadius:
                                                                         BorderRadius.circular(
                                                                             10),
-                                                                    color: selectedNumber ==
-                                                                            numbers[
-                                                                                index]
-                                                                        ? colors
-                                                                            .primary // Change the color when selected
-                                                                        : colors
-                                                                            .whiteTemp
-                                                                            .withOpacity(0.4),
+                                                                    color: selectedNumber == numbers[index]
+                                                                        ? colors.primary // Change the color when selected
+                                                                        : colors.whiteTemp.withOpacity(0.4),
                                                                   ),
                                                                   height: 50,
                                                                   width: 70,
@@ -1444,10 +1451,8 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                                     '₹${numbers[index]}',
                                                                     style: TextStyle(
                                                                         color: selectedNumber == numbers[index]
-                                                                            ? colors
-                                                                                .whiteTemp
-                                                                            : colors
-                                                                                .blackTemp,
+                                                                            ? colors.whiteTemp
+                                                                            : colors.blackTemp,
                                                                         fontSize:
                                                                             18),
                                                                   )),
@@ -1604,22 +1609,17 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                             amt = 5;
                                                             if(selectedNumber!= null){
                                                               setState(() {
-                                                                finalTotalAmount =
-                                                                    finalTotalAmount +
-                                                                        amt;
+                                                                finalTotalAmount = finalTotalAmount + amt;
                                                               });
                                                             }else{
-                                                              finalTotalAmount = context.read<CartProvider>().totalPrice +
-                                                                      amt;
+                                                              finalTotalAmount = context.read<CartProvider>().totalPrice + amt;
                                                             }
 
                                                           } else {
                                                             if(selectedNumber!= null){
                                                               print('11111');
                                                               setState(() {
-                                                                finalTotalAmount =
-                                                                    finalTotalAmount -
-                                                                        amt;
+                                                                finalTotalAmount = finalTotalAmount - amt;
                                                                 amt = 0;
                                                               });
                                                             }else {
@@ -1908,8 +1908,12 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                                                   _placeOrder = true;
                                                 },
                                               );
-                                            } else {
+                                            }
+                                            else {
                                               if (isAvailable) {
+
+
+
                                               await getPhonpayURL();
                                                 if (context
                                                         .read<CartProvider>()
@@ -2539,6 +2543,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   InAppWebViewController? _webViewController;
 
   getPhonpayURL({int? i}) async {
+   // print("HKKJKBJKhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
     SharedPreferences preferences = await SharedPreferences.getInstance();
     mobile = preferences.getString("mobile");
     var headers = {
@@ -2566,6 +2571,9 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
 
       url = finalResult['data']['data']['instrumentResponse']['redirectInfo']
           ['url'];
+      setState(() {
+        url;
+      });
 
       merchantId = finalResult['data']['data']['merchantId'];
       merchantTransactionId =
@@ -2576,9 +2584,13 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
   }
 
    initiatePayment() {
+    print(url.toString()+"______________________");
     // Replace this with the actual PhonePe payment URL you have
     String phonePePaymentUrl = url ?? '';
     callBackUrl = "https://jetsetterindia.com/app/home/phonepay_success";
+
+
+
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -2695,19 +2707,16 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
     //   ScaffoldMessenger.of(context)
     //       .showSnackBar(SnackBar(content: Text('Payment Success')));
     // }
-    print('___________${_paymentStatus}____vssdfff______');
 
     setState(() {});
   }
 
   Future<Map<String, dynamic>> fetchDataFromUrl() async {
-    print('__________eeeeeee_________');
     final response = await http.post(
         Uri.parse(
             "https://jetsetterindia.com/app/v1/api/check_phonepay_status"),
         body: {"transaction_id": merchantTransactionId});
     if (response.statusCode == 200) {
-      print('____fffffffff______${response.statusCode}_________');
       // If the request is successful, parse the JSON response and return it
       return json.decode(response.body);
     } else {
@@ -3869,7 +3878,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
         };
 
         apiBaseHelper.postAPICall(checkCartDelApi, parameter).then(
-          (getdata) {
+          (getdata) async {
             bool error = getdata['error'];
             String? msg = getdata['message'];
             var data = getdata['data'];
@@ -3898,6 +3907,7 @@ class StateCart extends State<Cart> with TickerProviderStateMixin {
                   context.read<CartProvider>().deliverable = true;
                 },
               );
+              await getPhonpayURL();
               confirmDialog(
                   allTotalPrice, finalTotalAmount, selectedNumber, amt);
             }

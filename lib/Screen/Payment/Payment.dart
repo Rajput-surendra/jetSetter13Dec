@@ -662,7 +662,7 @@ class StatePayment extends State<Payment> with TickerProviderStateMixin {
         context,
         MaterialPageRoute(
           builder: (context) => Scaffold(
-            appBar: getSimpleAppBar(getTranslated(context, 'PhonePe Payment')!, context),
+            appBar: getSimpleAppBar(getTranslated(context, 'PhonePe11 Payment')!, context),
             body: InAppWebView(
               initialUrlRequest: URLRequest(url: Uri.parse(phonePePaymentUrl)),
               onWebViewCreated: (controller) {
